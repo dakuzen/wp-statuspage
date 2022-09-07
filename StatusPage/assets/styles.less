@@ -1,0 +1,265 @@
+#statuspage-app {
+
+  form {
+    .form-group {
+      padding: 8px 12px;
+      label {
+        display: block;
+        margin: 0 0 6px 0;
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+      input[type=text],
+      input[type=email],
+      select,
+      textarea {
+        margin: 0 0 6px 0;
+        width: 100%;
+      }
+      small {
+        display: block;
+      }
+      &.scanConfig {
+        textarea {
+          height: 240px;
+        }
+      }
+    }
+    .form-check {
+      display: inline-block;
+      margin: 0 10px 0 0;
+      input {
+        display: inline-block;
+      }
+      label {
+        font-weight: normal;
+        display: inline-block;
+      }
+    }
+    .form-buttons {
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.05);
+      text-align: right;
+      margin-top: 15px;
+    }
+    .btn {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #efefef;
+      transition: all 0.5s;
+      padding: 6px 12px;
+      cursor: pointer;
+      &:hover {
+        background: #d0d0d0;
+      }
+      &.btn-primary {
+        color: white;
+        background-color: #007bff;
+        &:hover {
+          background-color: darken(#007bff, 10);
+        }
+      }
+      &.btn-success {
+        color: white;
+        background-color: #28a745;
+        &:hover {
+          background-color: darken(#28a745, 10);
+        }
+      }
+    }
+  }
+
+  &.settings-page {
+    padding: 25px;
+    h1 {
+      margin: 0 0 25px 0;
+    }
+    form {
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+    }
+  }
+
+  &.statuspage-notices {
+    .statuspage-notice {
+      border: 2px solid #eee;
+      border-radius: 4px;
+      .statuspage-notice-label {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 1.2em;
+        padding: 12px;
+      }
+      .statuspage-notice-content {
+        padding: 12px;
+        .statuspage-incident {
+          font-size: 1.1em;
+          margin: 0 0 1em 0;
+          .statuspage-incident-type {
+            font-weight: bold;
+            display: inline;
+            margin: 0 .25em 0 0;
+            &:after {
+              content: " - ";
+            }
+          }
+          .statuspage-incident-content {
+            display: inline;
+          }
+          .statuspage-incident-date {
+            color: #999999;
+          }
+          &.update {
+          }
+          &.identified {
+          }
+          &.investigating {
+          }
+        }
+      }
+      &.impact-minor {
+        border-color: #F1C40F;
+        .statuspage-notice-label {
+          background-color: #F1C40F;
+        }
+      }
+      &.impact-major {
+        border-color: #E67E22;
+        .statuspage-notice-label {
+          background-color: #E67E22;
+        }
+      }
+      &.impact-critical {
+        border-color: #DC143C;
+        .statuspage-notice-label {
+          background-color: #DC143C;
+        }
+      }
+    }
+  }
+
+  .statuspage-shortcodes {
+    padding: 20px;
+    code {
+      display: block;
+      margin: 0 0 1em 0;
+    }
+  }
+
+  &.statuspage-archive {
+    .statuspage-notice {
+      .statuspage-notice-label {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin: 0 0 .5em 0;
+      }
+      .statuspage-notice-content {
+        .statuspage-incident {
+          font-size: 1.0em;
+          margin: 0 0 1em 0;
+          .statuspage-incident-type {
+            font-weight: bold;
+            display: inline;
+            margin: 0 .25em 0 0;
+            &:after {
+              content: " - ";
+            }
+          }
+          .statuspage-incident-content {
+            display: inline;
+          }
+          .statuspage-incident-date {
+            color: #999999;
+          }
+        }
+      }
+    }
+    .statuspage-notice + .statuspage-notice {
+      border-top: 1px solid #ccc;
+    }
+  }
+
+  &.statuspage-legend {
+    .statuspage-legend-list {
+      margin: 0 0 .5em 0;
+      padding: 15px 0;
+      font-size: 1.1em;
+      .statuspage-status {
+        margin: 0 0 .5em 0;
+        padding: 0;
+        list-style: none;
+        &.operational {
+          .fa {
+            color: #008000;
+          }
+        }
+        &.degraded-performance {
+          .fa {
+            color: #F1C40F;
+          }
+        }
+        &.partial-outage {
+          .fa {
+            color: #E67E22;
+          }
+        }
+        &.major-outage {
+          .fa {
+            color: #DC143C;
+          }
+        }
+        &.maintenance {
+          .fa {
+            color: #271E2C;
+          }
+        }
+      }
+    }
+  }
+
+  &.statuspage-statuslist {
+    padding: 15px 0;
+    .statuspage-service {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1em;
+      margin: 0 0 .5em 0;
+      .statuspage-service-label {
+        flex: 0 1 auto;
+      }
+      .statuspage-service-status {
+        flex: 0 1 auto;
+        i {
+          margin: 0 .25em 0 0;
+        }
+      }
+      &.operational {
+        .statuspage-service-status {
+          color: #008000;
+        }
+      }
+      &.degraded-performance {
+        .statuspage-service-status {
+          color: #F1C40F;
+        }
+      }
+      &.partial-outage {
+        .statuspage-service-status {
+          color: #E67E22;
+        }
+      }
+      &.major-outage {
+        .statuspage-service-status {
+          color: #DC143C;
+        }
+      }
+      &.maintenance {
+        .statuspage-service-status {
+          color: #271E2C;
+        }
+      }
+    }
+  }
+
+}
