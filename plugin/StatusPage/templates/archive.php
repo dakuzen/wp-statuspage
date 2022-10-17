@@ -1,7 +1,7 @@
 <?php
 
 // Open Block
-?><div id="<?php echo $app->getConfig('app-slug') ?>-app" class="statuspage-archive"><?php
+?><div class="<?php echo $app->getConfig('app-slug') ?>-app statuspage-archive"><?php
 
 // Loop Notices
 foreach ($incidentPosts AS $post) {

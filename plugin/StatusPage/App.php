@@ -26,6 +26,11 @@ class App {
     );
 
   /**
+   * Messages
+   */
+  public $messages = array();
+
+  /**
    * [__construct description]
    */
   public function __construct(){
@@ -34,6 +39,9 @@ class App {
     $this->registerShortcodes();
     $this->registerManager();
     $this->registerAdminMenu();
+    $this->addPluginPageLink();
+    $this->setupEmailSender();
+    $this->setupCron();
   }
 
   /**
@@ -59,6 +67,16 @@ class App {
       require __DIR__ . '/vendor/autoload.php';
 
     /**
+     * Session
+     */
+    if (!session_id())
+      session_start();
+    if (!empty($_SESSION['statuspage_messages'])) {
+      $this->messages = $_SESSION['statuspage_messages'];
+      unset($_SESSION['statuspage_messages']);
+    }
+
+    /**
      * Enque Styles
      */
     wp_register_style('statuspage-fa', '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css');
@@ -71,41 +89,10 @@ class App {
      */
     wp_register_script('statuspage-script', plugins_url('assets/script.js', __FILE__), array('jquery'), '1.'.rand(1000,9999));
     wp_enqueue_script('statuspage-script');
-    wp_register_script('jquery-ui', 'https://code.jquery.com/ui/1.13.1/jquery-ui.min.js', array('jquery'), '1.13.1');
+    wp_register_script('jquery-ui', 'https://code.jquery.com/ui/1.13.2/jquery-ui.min.js', array('jquery'), '1.13.2');
     wp_enqueue_script('jquery-ui');
-
-    /**
-     * Cron
-     */
-    if (preg_match('/^\/'.$this->getConfig('app-slug').'\/cron(|\/.*?)(\?.*$|)$/', $_SERVER['REQUEST_URI'], $match)){
-      $this->loadController('cron.php', array());
-      exit;
-    }
-
-    /**
-     * Validate User
-     */
-    $user = wp_get_current_user();
-    if (in_array('cc_manager', (array)$user->roles) || in_array('cc_admin', (array)$user->roles)) {
-
-      /** Abort for Special Pages */
-      if (strpos($_SERVER['REQUEST_URI'], '/wp-login.php') !== false) {
-        return;
-      }
-
-      /** Limit to Chart Manager */
-      if (strpos($_SERVER['REQUEST_URI'], '/'.$this->getConfig('app-slug')) === false) {
-        wp_redirect('/'.$this->getConfig('app-slug'));
-        exit;
-      }
-
-    }
-
-    // Redirect Guest
-    else if (strpos($_SERVER['REQUEST_URI'], '/'.$this->getConfig('app-slug')) !== false) {
-      wp_redirect('/');
-      exit;
-    }
+    wp_register_style('jquery-ui', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css');
+    wp_enqueue_style('jquery-ui');
 
   }
 
@@ -127,6 +114,30 @@ class App {
    */
   public function install(){
     global $wpdb;
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    $charset_collate = $wpdb->get_charset_collate();
+
+    // Logs
+    $sql = "CREATE TABLE `{$wpdb->prefix}statuspage_logs` (
+      `log_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ,
+      `log_message` VARCHAR(100) NOT NULL ,
+      `log_date` DATETIME NOT NULL,
+      PRIMARY KEY (`log_id`)
+      ) $charset_collate;";
+    dbDelta( $sql );
+
+    // Subscriptions
+    $sql = "CREATE TABLE `{$wpdb->prefix}statuspage_subscriptions` (
+      `subscriber_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ,
+      `subscriber_email` VARCHAR(100) NOT NULL ,
+      `subscriber_date` DATETIME NOT NULL ,
+      `subscriber_validated` TINYINT UNSIGNED NOT NULL DEFAULT '0',
+      `subscriber_validation_key` VARCHAR(12) NOT NULL ,
+      PRIMARY KEY (`subscriber_id`)
+      ) $charset_collate;";
+    dbDelta( $sql );
+
   }
 
   /**
@@ -141,6 +152,24 @@ class App {
    * @return [type] [description]
    */
   public function uninstall(){
+    wp_unschedule_event(
+      wp_next_scheduled( 'statuspage_cron_hook' ),
+      'statuspage_cron_hook'
+      );
+  }
+
+  /**
+   * Undocumented function
+   *
+   * @param [type] $message
+   * @return void
+   */
+  public function addSessionMessage($message){
+    if (is_string($message))
+      $message = array('code' => 100, 'message' => $message);
+    $this->messages[] = $message;
+    if (!headers_sent())
+      $_SESSION['statuspage_messages'] = $this->messages;
   }
 
   /**
@@ -152,13 +181,6 @@ class App {
    */
   public function route($continue, $route, $request=array()){
     global $wpdb;
-    if (!is_user_logged_in())
-      return $continue;
-    $user = wp_get_current_user();
-    $isManager = in_array('cc_manager', $user->roles);
-    $isAdmin = in_array('cc_admin', $user->roles);
-    if (!$isManager && !$isAdmin)
-      return $continue;
     $route = preg_replace('/^\//', '', preg_replace('/[^a-z\-\_\/]/', '', $route));
     $routeParts = explode('/', $route);
     $routeParams = array();
@@ -174,11 +196,23 @@ class App {
     if (empty($routeFile))
       $routeFile = 'index.php';
     $this->loadController($routeFile, array(
-      'isAdmin' => $isAdmin,
-      'isManager' => $isManager,
       'routeParams' => $routeParams
       ));
     exit;
+  }
+
+  /**
+   * Undocumented function
+   *
+   * @param string $route
+   * @return void
+   */
+  public function getRouteUrl($route = '') {
+    return get_site_url() . '/' . $this->getConfig('app-slug') . '/' . $route;
+  }
+
+  public function getTableSortUrl($page, $field, $order, $alt = true ) {
+    return 'admin.php?page=' . $page . '&orderby='. $field .'&order='. ($alt ? ($order=='asc'?'desc':'asc') : $order);
   }
 
   /**
@@ -188,8 +222,10 @@ class App {
    * @return [type]             [description]
    */
   public function loadController($controller, $request=array()) {
-
     global $wpdb;
+
+    // Admin
+    if ( is_user_logged_in() && current_user_can('manage_options') )
 
     // Stage
     unset($request['wpdb'], $request['controller']);
@@ -225,7 +261,7 @@ class App {
     if (file_exists($viewPath))
       require $viewPath;
     else
-      echo '[invalid view '.$controller.']';
+      echo '[invalid view '.$view.']';
 
   }
 
@@ -235,6 +271,23 @@ class App {
    * @return void
    */
   public function registerPostType(){
+
+    register_post_type('statuspage_emailtmpl', array(
+      'labels' => array(
+        'name' => __('Status Page Email Templates'),
+        'singular_name' => __('Status Page Email Template'),
+      ),
+      'public'              => false,
+      'has_archive'         => false,
+      'show_ui'             => true,
+      'show_in_menu'        => false,
+      'show_in_nav_menus'   => false,
+      'show_in_admin_bar'   => false,
+      'exclude_from_search' => true,
+      'publicly_queryable'  => true
+      )
+    );
+
     register_post_type('statuspage_incident', array(
         'labels' => array(
           'name' => __('Status Page Incidents'),
@@ -243,7 +296,7 @@ class App {
         'public'              => true,
         'has_archive'         => true,
         'show_ui'             => true,
-        'show_in_menu'        => true,
+        'show_in_menu'        => false,
         'show_in_nav_menus'   => true,
         'show_in_admin_bar'   => true,
         'exclude_from_search' => true,
@@ -413,15 +466,15 @@ SD;
   public function registerShortcodes(){
     add_shortcode('statuspage', function($params) {
 
-      // Cron Time
-      if (@$params['view'] == 'crontime') {
-        ob_start();
-        $this->loadView('crontime.php', $params);
-        return ob_get_clean();
-      }
-
-      // View
-      $view = in_array(@$params['view'], array('notices', 'archive', 'status', 'legend', 'subscribe')) ? @$params['view'] : 'status';
+      // Valid Shortcode Views
+      $view = in_array(@$params['view'], array(
+        'notices',
+        'messages',
+        'archive',
+        'status',
+        'legend',
+        'subscribe'
+        )) ? @$params['view'] : 'status';
 
       // Load Controller
       ob_start();
@@ -470,7 +523,7 @@ SD;
    * @return void
    */
   public function getPluginOption( $key, $default=null ){
-    return  get_option( $this->getConfig('app-slug').'_'.$key, $default );
+    return get_option( $this->getConfig('app-slug').'_'.$key, $default );
   }
 
   /**
@@ -491,16 +544,83 @@ SD;
     add_action('admin_menu', function(){
       // add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
       // add_submenu_page( '$parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function );
-      add_submenu_page(
-        'options-general.php',
-        'StatusPage Settings',
-        'StatusPage Settings',
-        'administrator',
-        $this->getConfig('app-slug').'-settings',
-        array( $this, 'displayPluginAdminSettings' )
+      $appSlug = $this->getConfig('app-slug');
+      add_menu_page(
+        __('StatusPage Subscribers', 'statuspage'),
+        __('StatusPage', 'statuspage'),
+        'manage_options',
+        $appSlug,
+        '',
+        'dashicons-chart-pie',
+        10
         );
-      });
+      add_submenu_page(
+        $appSlug,
+        __('StatusPage Subscribers', 'statuspage'),
+        __('Subscribers', 'statuspage'),
+        'manage_options',
+        $this->getConfig('app-slug'),
+        function(){ $this->loadController('admin/subscribers.php', array()); }
+        );
+      add_submenu_page(
+        $appSlug,
+        __('StatusPage Event Logs', 'statuspage'),
+        __('Event Logs', 'statuspage'),
+        'manage_options',
+        $this->getConfig('app-slug').'-eventlogs',
+        function(){ $this->loadController('admin/eventlogs.php', array()); }
+        );
+      add_submenu_page(
+        $appSlug,
+        __('StatusPage Incidents', 'statuspage'),
+        __('Incidents', 'statuspage'),
+        'manage_options',
+        'edit.php?post_type=statuspage_incident'
+        );
+      add_submenu_page(
+        $appSlug,
+        __('StatusPage Email Templates', 'statuspage'),
+        __('Email Templates', 'statuspage'),
+        'manage_options',
+        'edit.php?post_type=statuspage_emailtmpl'
+        );
+      add_submenu_page(
+        $appSlug,
+        __('StatusPage Settings', 'statuspage'),
+        __('Settings', 'statuspage'),
+        'manage_options',
+        $this->getConfig('app-slug').'-settings',
+        function(){ $this->loadController('admin/settings.php', array()); }
+        );
+      add_submenu_page(
+        $appSlug,
+        __('StatusPage Public', 'statuspage'),
+        __('View Status', 'statuspage'),
+        'manage_options',
+        get_post_permalink( $this->getPluginOption('pageId_statusPage') )
+        );
+        /*
+      add_menu_page(
+        __( 'Custom Menu Title', 'textdomain' ),
+        'custom menu',
+        'manage_options',
+        'myplugin/myplugin-admin.php',
+        '',
+        plugins_url( 'myplugin/images/icon.png' ),
+        6
+      );
+      */
+    });
+
     /*
+    add_submenu_page(
+      'options-general.php',
+      'StatusPage Settings',
+      'StatusPage Settings',
+      'administrator',
+      $this->getConfig('app-slug').'-settings',
+      array( $this, 'displayPluginAdminSettings' )
+      );
     register_setting(
       $this->getConfig('app-slug').'_settings',
       $this->getConfig('app-slug').'_settings',
@@ -521,8 +641,51 @@ SD;
     */
   }
 
+  public function addPluginPageLink(){
+    add_filter('plugin_action_links_wp-statuspage/wp-statuspage.php', function($links){
+      $url = esc_url(add_query_arg('page','statuspage-settings',get_admin_url().'admin.php'));
+      $settings_link = '<a href="'. $url .'">' . __( 'Settings' ) . '</a>';
+      $newLinks = array('settings' => $settings_link);
+      foreach ($links AS $k => $v) $newLinks[$k] = $v;
+      return $newLinks;
+    });
+  }
+
+  public function setupEmailSender(){
+    if ($emailFrom = $this->getPluginOption('emailFrom')) {
+      add_filter( 'wp_mail_from', function($email_from){
+        if ($email_from == 'wordpress@' . parse_url(get_site_url())['host'])
+          return App::getInstance()->getPluginOption('emailFrom');
+        return $email_from;
+      }, 0, 1);
+    }
+    if ($emailFromName = $this->getPluginOption('emailFromName')) {
+      add_filter( 'wp_mail_from_name', function($from_name){
+        if ($from_name == 'WordPress')
+          return App::getInstance()->getPluginOption('emailFromName');
+        return $email_from;
+      }, 0, 1);
+    }
+  }
+
+  public function setupCron(){
+    add_filter( 'cron_schedules', function($schedules){
+      $schedules['five_minutes'] = array(
+        'interval' => 300, // 5 minutes
+        'display'  => esc_html__( 'Every Five Minutes' )
+        );
+      return $schedules;
+    });
+    add_action( 'statuspage_cron_hook', function(){
+      App::getInstance()->loadController('cron.php');
+    });
+    if( !wp_next_scheduled('statuspage_cron_hook') ){
+      wp_schedule_event(time(), 'five_minutes', 'statuspage_cron_hook');
+    }
+  }
+
   public function displayPluginAdminSettings(){
-    $this->loadController('settings.php', array());
+    $this->loadController('admin/settings.php', array());
   }
 
   /**
@@ -563,6 +726,65 @@ SD;
       $content = str_replace($seek, $translation, $content);
     }
     return $content;
+  }
+
+  /**
+   * Undocumented function
+   *
+   * @param [type] $content
+   * @param [type] $translations
+   * @return void
+   */
+  public function interpolateContent($content, $data){
+    foreach ($data AS $key => $value) {
+      $content = str_replace('{$'.$key.'}', $value, $content);
+    }
+    return $content;
+  }
+
+  /**
+   * Undocumented function
+   *
+   * @param [type] $content
+   * @return void
+   */
+  public function trimContent($content){
+    $content = preg_replace('/^[\r\n\s]+|[\r\n\s]+$/', '', $content);
+    $content = preg_replace('/\s+/', ' ', $content);
+    return $content;
+  }
+
+  public function getDocumentXPath( $content ){
+    $doc = new \DOMDocument();
+    $prev = libxml_use_internal_errors();
+    libxml_use_internal_errors(true);
+    $doc->loadHTML($content);
+    $errors = libxml_get_errors();
+    // foreach ($errors as $error) { inspect($error); }
+    libxml_use_internal_errors($prev);
+    return new \DomXpath($doc);
+  }
+
+  /**
+   * Undocumented function
+   *
+   * @param [type] $message
+   * @return void
+   */
+  public function postActivityLog( $message ) {
+    global $wpdb;
+    $data = array(
+      'log_message' => $message,
+      'log_date' => current_time('mysql')
+    );
+    $result = $wpdb->insert("{$wpdb->prefix}statuspage_logs", $data);
+    return $result ? true : false;
+  }
+
+  public function sendMail( $recipients, $subject, $message ){
+    add_filter( 'wp_mail_content_type', function(){ return 'text/html'; });
+    foreach ($recipients AS $recipient)
+      wp_mail($recipient, $subject, $message);
   }
 
 }

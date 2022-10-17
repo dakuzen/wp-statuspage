@@ -1,83 +1,157 @@
-#statuspage-app {
+.statuspage-app {
 
-  form {
-    .form-group {
-      padding: 8px 12px;
-      label {
-        display: block;
-        margin: 0 0 6px 0;
-        font-size: 1.1em;
-        font-weight: bold;
+  [data-tooltip]:hover {
+    cursor: pointer;
+  }
+
+  .form-group {
+    padding: 0;
+    margin: 0 0 1.5em 0;
+    label {
+      display: block;
+      margin: 0 0 6px 0;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+    input[type=text],
+    input[type=email],
+    select,
+    textarea {
+      margin: 0 0 6px 0;
+      width: 100%;
+      &.half {
+        width: 50%;
       }
-      input[type=text],
-      input[type=email],
-      select,
+    }
+    small {
+      display: block;
+    }
+    &.scanConfig {
       textarea {
-        margin: 0 0 6px 0;
-        width: 100%;
-      }
-      small {
-        display: block;
-      }
-      &.scanConfig {
-        textarea {
-          height: 240px;
-        }
+        height: 240px;
       }
     }
-    .form-check {
+  }
+  .form-check {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    input {
       display: inline-block;
-      margin: 0 10px 0 0;
-      input {
-        display: inline-block;
-      }
-      label {
-        font-weight: normal;
-        display: inline-block;
-      }
     }
-    .form-buttons {
-      padding: 8px 12px;
-      background: rgba(0,0,0,0.05);
-      text-align: right;
-      margin-top: 15px;
+    label {
+      font-weight: normal;
+      display: inline-block;
     }
-    .btn {
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #efefef;
-      transition: all 0.5s;
-      padding: 6px 12px;
-      cursor: pointer;
+  }
+  .form-buttons {
+    text-align: right;
+    margin-top: 15px;
+  }
+  .btn {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #efefef;
+    transition: all 0.5s;
+    padding: 6px 12px;
+    cursor: pointer;
+    &.btn-xs {
+      padding: 3px 6px;
+    }
+    &:hover {
+      background: #d0d0d0;
+    }
+    &.btn-primary {
+      color: white;
+      background-color: #007bff;
       &:hover {
-        background: #d0d0d0;
+        background-color: darken(#007bff, 10);
       }
-      &.btn-primary {
-        color: white;
-        background-color: #007bff;
-        &:hover {
-          background-color: darken(#007bff, 10);
-        }
-      }
-      &.btn-success {
-        color: white;
-        background-color: #28a745;
-        &:hover {
-          background-color: darken(#28a745, 10);
-        }
+    }
+    &.btn-success {
+      color: white;
+      background-color: #28a745;
+      &:hover {
+        background-color: darken(#28a745, 10);
       }
     }
   }
 
+  .statuspage-tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    .statuspage-tab {
+      transition: all 0.5s;
+      background: #e0e0e0;
+      color: #666;
+      flex: 0 1 auto;
+      margin: 0 0 0 1em;
+      border: 1px solid #ccc;
+      border-bottom: 0;
+      padding: 6px 8px;
+      text-decoration: none;
+      &.statuspage-active {
+        background: #f0f0f0;
+        color: #000;
+      }
+      &:hover {
+        background: #fff;
+      }
+    }
+  }
+  .statuspage-tab-content {
+    display: none;
+    padding: 15px;
+    background: #f0f0f0;
+    &.statuspage-active {
+      display: block;
+    }
+  }
+
   &.settings-page {
-    padding: 25px;
     h1 {
-      margin: 0 0 25px 0;
     }
     form {
-      padding: 20px;
-      border: 2px solid #ccc;
-      border-radius: 6px;
+    }
+    .statuspage-shortcodes {
+      code {
+        display: block;
+        margin: 0 0 1em 0;
+        padding: .5em;
+      }
+    }
+  }
+
+  &.statuspage-messages {
+    margin: 0 0 2em 0;
+    .statuspage-message {
+      border-left: 4px solid transparent;
+      background: #f0f0f0;
+      border-radius: 0 4px 4px 0;
+      line-height: 1.4em;
+      padding: .5em 1em;
+      margin: 0 0 1em 0;
+      p {
+        color: #000;
+        font-size: 1.1em;
+        strong {
+          display: block;
+          font-size: 1.4em;
+          margin: 0 0 .5em 0;
+          color: #000;
+        }
+      }
+      &.success {
+        border-color: #cfefcf;
+        p strong {
+          color: #309030;
+        }
+      }
+      &.error {
+        background-color: #DC143C;
+        p, p strong {
+          color: #ffffff;
+        }
+      }
     }
   }
 
@@ -118,6 +192,12 @@
           }
         }
       }
+      &.impact-maintenance {
+        border-color: #333333;
+        .statuspage-notice-label {
+          background-color: #333333;
+        }
+      }
       &.impact-minor {
         border-color: #F1C40F;
         .statuspage-notice-label {
@@ -137,21 +217,17 @@
         }
       }
     }
-  }
-
-  .statuspage-shortcodes {
-    padding: 20px;
-    code {
-      display: block;
-      margin: 0 0 1em 0;
+    .statuspage-notice + .statuspage-notice {
+      margin-top: 20px;
     }
   }
 
   &.statuspage-archive {
     .statuspage-notice {
+      padding: 15px 0;
       .statuspage-notice-label {
         font-weight: bold;
-        font-size: 1.1em;
+        font-size: 1.25em;
         margin: 0 0 .5em 0;
       }
       .statuspage-notice-content {
@@ -176,7 +252,7 @@
       }
     }
     .statuspage-notice + .statuspage-notice {
-      border-top: 1px solid #ccc;
+      border-top: 1px dashed #ccc;
     }
   }
 
@@ -209,7 +285,8 @@
             color: #DC143C;
           }
         }
-        &.maintenance {
+        &.maintenance,
+        &.under-maintenance {
           .fa {
             color: #271E2C;
           }
@@ -254,7 +331,8 @@
           color: #DC143C;
         }
       }
-      &.maintenance {
+      &.maintenance,
+      &.under-maintenance {
         .statuspage-service-status {
           color: #271E2C;
         }
@@ -262,4 +340,63 @@
     }
   }
 
+  &.statuspage-subscribe {
+  }
+  &.statuspage-subscribe-modal {
+    display: none;
+    padding: 20px;
+    h3 {
+      display: none;
+    }
+    p {
+      font-size: 1.1em;
+    }
+  }
+  &.statuspage-subscribe-response {
+    .statuspage-message {
+      strong {
+        display: block;
+        font-size: 1.2em;
+        padding: 0 0 .5em 0;
+        margin: 0 0 .5em 0;
+      }
+      &.success {
+        strong {
+          border-bottom: 4px solid #cfefcf;
+        }
+      }
+      &.error {
+        strong {
+          border-bottom: 4px solid #efcfcf;
+        }
+      }
+    }
+  }
+
+}
+
+body {
+  .ui-widget-overlay.ui-front {
+    background: #000;
+    opacity: .5;
+  }
+  .ui-tooltip-statuspage {
+    border: 3px solid #990000!important;
+    border-radius: 0 12px 0 12px;
+    padding: 18px;
+    .ui-tooltip-content {
+      strong {
+        font-size: 1.25em;
+      }
+    }
+    &:after-x {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 10px;
+      border-width: 7px;
+      border-style: solid;
+      border-color: transparent transparent gray transparent;
+    }
+  }
 }

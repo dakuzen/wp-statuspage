@@ -1,7 +1,7 @@
 <?php
 
 // Open Block
-?><div id="<?php echo $app->getConfig('app-slug') ?>-app" class="statuspage-notices"><?php
+?><div class="<?php echo $app->getConfig('app-slug') ?>-app statuspage-notices"><?php
 
 // Loop Notices
 foreach ($incidentPosts AS $post) {
@@ -17,4 +17,3 @@ foreach ($incidentPosts AS $post) {
 
 // Close Block
 ?></div><?php
-

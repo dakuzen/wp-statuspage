@@ -1,6 +1,7 @@
 <?php
 
 use WebuddhaInc\StatusPage\App as StatusPageApp;
+
 $app = StatusPageApp::getInstance();
 
 // Store
@@ -12,4 +13,4 @@ if (!empty($_POST[$app->getConfig('app-slug').'_settings'])) {
 }
 
 // View
-$app->loadView('settings.php', get_defined_vars());
+$app->loadView('admin/settings.php', get_defined_vars());

@@ -19,6 +19,8 @@ if( !function_exists('inspect') ){
 }
 
 require 'StatusPage/App.php';
+require 'StatusPage/Subscriber.php';
+require 'StatusPage/Notification.php';
 
 add_action('init', function(){
   StatusPageApp::getInstance()->init();
@@ -26,6 +28,10 @@ add_action('init', function(){
 
 register_activation_hook( __FILE__, function(){
   StatusPageApp::getInstance()->install();
+});
+
+register_deactivation_hook( __FILE__, function(){
+  StatusPageApp::getInstance()->uninstall();
 });
 
 add_filter('do_parse_request', function($continue, WP $wp){
