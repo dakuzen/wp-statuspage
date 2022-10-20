@@ -23,24 +23,24 @@ foreach ($scanConfig->services AS $service) {
       switch(strtolower($lastStatusCode)) {
         case 'operational':
           echo '<i class="fa fa-check"></i>' . esc_html__($lastStatus->status, 'statuspage');
-          echo '<div class="tooltip hidden">' . __('<strong>Operational</strong><br>Operational means exactly what it sounds like. The component is functioning as expected and in a timely manner.', 'statuspage') . '</div>';
+          echo '<div class="tooltip hidden">' . __('<strong>Operational</strong><br>The service is functioning as expected and in a timely manner.', 'statuspage') . '</div>';
           break;
         case 'degraded-performance':
           echo '<i class="fa fa-minus-square"></i>' . esc_html__($lastStatus->status, 'statuspage');
-          echo '<div class="tooltip hidden">' . __('<strong>Degraded Performance</strong><br>Degraded performance means the component is working but is slow or otherwise impacted in a minor way.<br><br>An example of this would be if you were experiencing an unusually high amount of traffic and the component was taking longer to perform its job than normal.', 'statuspage') . '</div>';
+          echo '<div class="tooltip hidden">' . __('<strong>Degraded Performance</strong><br>Degraded performance means the service is working but is slow or otherwise impacted in a minor way. An example of this would be if you were experiencing an unusually high amount of traffic and the latency is higher than normal.', 'statuspage') . '</div>';
           break;
         case 'partial-outage':
           echo '<i class="fa fa-exclamation-triangle"></i>' . esc_html__($lastStatus->status, 'statuspage');
-          echo '<div class="tooltip hidden">' . __('<strong>Partial Outage</strong><br>Components should be set to partial outage when they are completely broken for a subset of customers. An example of this would be if some subset of customer\'s data lived in a specific data center that was down. The component might be broken for that subset of customers but is working for the rest and thus there is a partial outage.', 'statuspage') . '</div>';
+          echo '<div class="tooltip hidden">' . __('<strong>Partial Outage</strong><br>The service is completely broken for a subset of customers while working as normal for other customers.', 'statuspage') . '</div>';
           break;
         case 'major-outage':
           echo '<i class="fa fa-times"></i>' . esc_html__($lastStatus->status, 'statuspage');
-          echo '<div class="tooltip hidden">' . __('<strong>Major Outage</strong><br>Components should be set to major outage when they are completely unavailable.', 'statuspage') . '</div>';
+          echo '<div class="tooltip hidden">' . __('<strong>Major Outage</strong><br>Service is completely unavailable to all customers.', 'statuspage') . '</div>';
           break;
         case 'maintenance':
         case 'under-maintenance':
           echo '<i class="fa fa-wrench"></i>' . esc_html__($lastStatus->status, 'statuspage');
-          echo '<div class="tooltip hidden">' . __('<strong>Under Maintenance</strong><br>Under maintenance means exactly what it sounds like. The component is currently being worked on.', 'statuspage') . '</div>';
+          echo '<div class="tooltip hidden">' . __('<strong>Under Maintenance</strong><br>The service is currently being worked on.', 'statuspage') . '</div>';
           break;
       }
       ?></div>

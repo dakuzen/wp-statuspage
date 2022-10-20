@@ -22,7 +22,7 @@ var statuspage = new function(){
   }
   this.openSubscribeDialog = function(el){
     this.closeSubscribeDialog();
-    let modal = jQuery('#statuspage-app.statuspage-subscribe-modal').clone();
+    let modal = jQuery('.statuspage-app.statuspage-subscribe-modal').clone();
     let modalWidth = 420;
     if (modal.length) {
       modal.dialog({
@@ -40,7 +40,7 @@ var statuspage = new function(){
   }
   this.postSubscribeForm = function(el){
     let form = jQuery(el);
-    let modal = jQuery(el).closest('#statuspage-app');
+    let modal = jQuery(el).closest('.statuspage-app');
     form.find('input,button').attr('disabled', true);
     jQuery.ajax({
       type: 'POST',
