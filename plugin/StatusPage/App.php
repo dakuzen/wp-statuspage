@@ -22,7 +22,7 @@ class App {
    */
   public $config = array(
     'app-slug' => 'statuspage',
-    'compile-less' => true
+    'compile-less' => false
     );
 
   /**

@@ -6,7 +6,7 @@ $pagePosts = $wpdb->get_results("SELECT `ID`, `post_title` FROM `{$wpdb->prefix}
 $emailTemplates = $wpdb->get_results("SELECT `ID`, `post_title` FROM `{$wpdb->prefix}posts` WHERE `post_status` = 'publish' AND `post_type` = 'statuspage_emailtmpl'");
 
 ?>
-<div id="<?php echo $app->getConfig('app-slug') ?>-app" class="settings-page wrap">
+<div class="<?php echo $app->getConfig('app-slug') ?>-app settings-page wrap">
   <h1 class="wp-heading-inline"><?php echo __('StatusPage Settings') ?></h1>
   <div class="statuspage-tabs">
     <a class="statuspage-tab statuspage-active" href="#tab-general">General</a>

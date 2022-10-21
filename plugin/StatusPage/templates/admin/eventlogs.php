@@ -1,7 +1,7 @@
 <?php
 
 ?>
-<div id="<?php echo $app->getConfig('app-slug') ?>-app" class="eventlogs-page wrap">
+<div class="<?php echo $app->getConfig('app-slug') ?>-app eventlogs-page wrap">
   <h1 class="wp-heading-inline"><?php echo __('StatusPage Subscribers') ?></h1>
 
   <form>

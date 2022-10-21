@@ -132,7 +132,7 @@ if ($pageContent) {
         $serviceNotifications[] = (object)array(
           'componentId' => $service->componentId,
           'newStatus' => $serviceStatus,
-          'oldStatus' => $serviceHistory->status
+          'oldStatus' => empty($serviceHistory) ? '' : $serviceHistory->status
           );
 
       }

@@ -1,0 +1,334 @@
+.statuspage-app [data-tooltip]:hover {
+  cursor: pointer;
+}
+.statuspage-app .form-group {
+  padding: 0;
+  margin: 0 0 1.5em 0;
+}
+.statuspage-app .form-group label {
+  display: block;
+  margin: 0 0 6px 0;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.statuspage-app .form-group input[type=text],
+.statuspage-app .form-group input[type=email],
+.statuspage-app .form-group select,
+.statuspage-app .form-group textarea {
+  margin: 0 0 6px 0;
+  width: 100%;
+}
+.statuspage-app .form-group input[type=text].half,
+.statuspage-app .form-group input[type=email].half,
+.statuspage-app .form-group select.half,
+.statuspage-app .form-group textarea.half {
+  width: 50%;
+}
+.statuspage-app .form-group small {
+  display: block;
+}
+.statuspage-app .form-group.scanConfig textarea {
+  height: 240px;
+}
+.statuspage-app .form-check {
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+.statuspage-app .form-check input {
+  display: inline-block;
+}
+.statuspage-app .form-check label {
+  font-weight: normal;
+  display: inline-block;
+}
+.statuspage-app .form-buttons {
+  text-align: right;
+  margin-top: 15px;
+}
+.statuspage-app .btn {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #efefef;
+  transition: all 0.5s;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.statuspage-app .btn.btn-xs {
+  padding: 3px 6px;
+}
+.statuspage-app .btn:hover {
+  background: #d0d0d0;
+}
+.statuspage-app .btn.btn-primary {
+  color: white;
+  background-color: #007bff;
+}
+.statuspage-app .btn.btn-primary:hover {
+  background-color: #0062cc;
+}
+.statuspage-app .btn.btn-success {
+  color: white;
+  background-color: #28a745;
+}
+.statuspage-app .btn.btn-success:hover {
+  background-color: #1e7e34;
+}
+.statuspage-app .statuspage-tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+.statuspage-app .statuspage-tabs .statuspage-tab {
+  transition: all 0.5s;
+  background: #e0e0e0;
+  color: #666;
+  flex: 0 1 auto;
+  margin: 0 0 0 1em;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  padding: 6px 8px;
+  text-decoration: none;
+}
+.statuspage-app .statuspage-tabs .statuspage-tab.statuspage-active {
+  background: #f0f0f0;
+  color: #000;
+}
+.statuspage-app .statuspage-tabs .statuspage-tab:hover {
+  background: #fff;
+}
+.statuspage-app .statuspage-tab-content {
+  display: none;
+  padding: 15px;
+  background: #f0f0f0;
+}
+.statuspage-app .statuspage-tab-content.statuspage-active {
+  display: block;
+}
+.statuspage-app.settings-page .statuspage-shortcodes code {
+  display: block;
+  margin: 0 0 1em 0;
+  padding: .5em;
+}
+.statuspage-app.statuspage-messages {
+  margin: 0 0 2em 0;
+}
+.statuspage-app.statuspage-messages .statuspage-message {
+  border-left: 4px solid transparent;
+  background: #f0f0f0;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.4em;
+  padding: .5em 1em;
+  margin: 0 0 1em 0;
+}
+.statuspage-app.statuspage-messages .statuspage-message p {
+  color: #000;
+  font-size: 1.1em;
+}
+.statuspage-app.statuspage-messages .statuspage-message p strong {
+  display: block;
+  font-size: 1.4em;
+  margin: 0 0 .5em 0;
+  color: #000;
+}
+.statuspage-app.statuspage-messages .statuspage-message.success {
+  border-color: #cfefcf;
+}
+.statuspage-app.statuspage-messages .statuspage-message.success p strong {
+  color: #309030;
+}
+.statuspage-app.statuspage-messages .statuspage-message.error {
+  background-color: #DC143C;
+}
+.statuspage-app.statuspage-messages .statuspage-message.error p,
+.statuspage-app.statuspage-messages .statuspage-message.error p strong {
+  color: #ffffff;
+}
+.statuspage-app.statuspage-notices .statuspage-notice {
+  border: 2px solid #eee;
+  border-radius: 4px;
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-label {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 12px;
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-content {
+  padding: 12px;
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-content .statuspage-incident {
+  font-size: 1.1em;
+  margin: 0 0 1em 0;
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-type {
+  font-weight: bold;
+  display: inline;
+  margin: 0 .25em 0 0;
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-type:after {
+  content: " - ";
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-content {
+  display: inline;
+}
+.statuspage-app.statuspage-notices .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-date {
+  color: #999999;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-maintenance {
+  border-color: #333333;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-maintenance .statuspage-notice-label {
+  background-color: #333333;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-minor {
+  border-color: #F1C40F;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-minor .statuspage-notice-label {
+  background-color: #F1C40F;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-major {
+  border-color: #E67E22;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-major .statuspage-notice-label {
+  background-color: #E67E22;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-critical {
+  border-color: #DC143C;
+}
+.statuspage-app.statuspage-notices .statuspage-notice.impact-critical .statuspage-notice-label {
+  background-color: #DC143C;
+}
+.statuspage-app.statuspage-notices .statuspage-notice + .statuspage-notice {
+  margin-top: 20px;
+}
+.statuspage-app.statuspage-archive .statuspage-notice {
+  padding: 15px 0;
+}
+.statuspage-app.statuspage-archive .statuspage-notice .statuspage-notice-label {
+  font-weight: bold;
+  font-size: 1.25em;
+  margin: 0 0 .5em 0;
+}
+.statuspage-app.statuspage-archive .statuspage-notice .statuspage-notice-content .statuspage-incident {
+  font-size: 1.0em;
+  margin: 0 0 1em 0;
+}
+.statuspage-app.statuspage-archive .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-type {
+  font-weight: bold;
+  display: inline;
+  margin: 0 .25em 0 0;
+}
+.statuspage-app.statuspage-archive .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-type:after {
+  content: " - ";
+}
+.statuspage-app.statuspage-archive .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-content {
+  display: inline;
+}
+.statuspage-app.statuspage-archive .statuspage-notice .statuspage-notice-content .statuspage-incident .statuspage-incident-date {
+  color: #999999;
+}
+.statuspage-app.statuspage-archive .statuspage-notice + .statuspage-notice {
+  border-top: 1px dashed #ccc;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list {
+  margin: 0 0 .5em 0;
+  padding: 15px 0;
+  font-size: 1.1em;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status {
+  margin: 0 0 .5em 0;
+  padding: 0;
+  list-style: none;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status.operational .fa {
+  color: #008000;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status.degraded-performance .fa {
+  color: #F1C40F;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status.partial-outage .fa {
+  color: #E67E22;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status.major-outage .fa {
+  color: #DC143C;
+}
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status.maintenance .fa,
+.statuspage-app.statuspage-legend .statuspage-legend-list .statuspage-status.under-maintenance .fa {
+  color: #271E2C;
+}
+.statuspage-app.statuspage-statuslist {
+  padding: 15px 0;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+  margin: 0 0 .5em 0;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service .statuspage-service-label {
+  flex: 0 1 auto;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service .statuspage-service-status {
+  flex: 0 1 auto;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service .statuspage-service-status i {
+  margin: 0 .25em 0 0;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service.operational .statuspage-service-status {
+  color: #008000;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service.degraded-performance .statuspage-service-status {
+  color: #F1C40F;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service.partial-outage .statuspage-service-status {
+  color: #E67E22;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service.major-outage .statuspage-service-status {
+  color: #DC143C;
+}
+.statuspage-app.statuspage-statuslist .statuspage-service.maintenance .statuspage-service-status,
+.statuspage-app.statuspage-statuslist .statuspage-service.under-maintenance .statuspage-service-status {
+  color: #271E2C;
+}
+.statuspage-app.statuspage-subscribe-modal {
+  display: none;
+  padding: 20px;
+}
+.statuspage-app.statuspage-subscribe-modal h3 {
+  display: none;
+}
+.statuspage-app.statuspage-subscribe-modal p {
+  font-size: 1.1em;
+}
+.statuspage-app.statuspage-subscribe-response .statuspage-message strong {
+  display: block;
+  font-size: 1.2em;
+  padding: 0 0 .5em 0;
+  margin: 0 0 .5em 0;
+}
+.statuspage-app.statuspage-subscribe-response .statuspage-message.success strong {
+  border-bottom: 4px solid #cfefcf;
+}
+.statuspage-app.statuspage-subscribe-response .statuspage-message.error strong {
+  border-bottom: 4px solid #efcfcf;
+}
+body .ui-widget-overlay.ui-front {
+  background: #000;
+  opacity: .5;
+}
+body .ui-tooltip-statuspage {
+  border: 3px solid #990000!important;
+  border-radius: 0 12px 0 12px;
+  padding: 18px;
+}
+body .ui-tooltip-statuspage .ui-tooltip-content strong {
+  font-size: 1.25em;
+}
+body .ui-tooltip-statuspage:after-x {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 10px;
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent gray transparent;
+}

@@ -13,7 +13,19 @@ Types of changes
 - Security in case of vulnerabilities.
 
 ## [Unreleased]
-### Added
-- Initialized the package
 
-## [0.0.0] - 0000-00-00
+## [1.2.0] - 2022-10-21
+### Changed
+- Removed LESS compiler requirement
+- Use of container ID tag for page wrapper
+
+## [1.1.0] - 2022-10-21
+### Changed
+- Cron Cache Timeout to 5 minutes
+
+### Fixed
+- Assumed last status triggering error on new component addition
+
+## [1.0.0] - 2022-10-01
+### Added
+- Initial release

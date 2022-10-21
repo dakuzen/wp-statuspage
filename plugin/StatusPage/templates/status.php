@@ -14,6 +14,7 @@ foreach ($scanConfig->services AS $service) {
 
   // Save Status
   $lastStatus = $app->getPluginOption('serviceHistory_'.$service->componentId);
+  if (empty($lastStatus)) continue;
   $lastStatusCode = str_replace(' ', '-', strtolower($lastStatus->status));
 
   ?>
