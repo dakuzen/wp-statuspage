@@ -9,7 +9,7 @@ $app = StatusPageApp::getInstance();
 $forceUpdate  = false;
 $forceProcess = false;
 $forceNotice  = false;
-$cacheTimeout = 3600;
+$cacheTimeout = 300; // 5 minutes
 
 // Stage
 $scanTargetUrl = $app->getPluginOption('scanTargetUrl');
