@@ -239,7 +239,6 @@ if ($pageContent) {
           ||
           $incidentPost->post_modified_gmt == $activeIncidentRows[$incidentId]->incidentLastUpdate
           ) {
-          $relevantIncidentPosts[] = $incidentId;
           // Skip
           continue;
         }

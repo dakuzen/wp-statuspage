@@ -14,6 +14,10 @@ Types of changes
 
 ## [Unreleased]
 
+## [1.4.1] - 2022-11-29
+### Fixed
+- Adjusted incident review to patch repeat bug
+
 ## [1.4.0] - 2022-11-29
 ### Fixed
 - Improve handling of missing remote content

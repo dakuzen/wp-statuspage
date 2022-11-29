@@ -3,7 +3,7 @@
 Plugin Name:  Status Page
 Plugin URI:   https://github.com/WebuddhaInc/wp-plugin-statuspage
 Description:  Atlassian Status Page Mirroring
-Version:      1.4.0
+Version:      1.4.1
 Author:       David Hunt
 Author URI:   ~
 License:      GPL2
