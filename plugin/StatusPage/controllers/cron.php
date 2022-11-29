@@ -6,9 +6,9 @@ use WebuddhaInc\StatusPage\Notification as StatusPageNotification;
 $app = StatusPageApp::getInstance();
 
 // Flags
-$forceUpdate  = false;
-$forceProcess = false;
-$forceNotice  = false;
+$forceUpdate  = @$_REQUEST['forceUpdate'] ?: false;
+$forceProcess = @$_REQUEST['forceProcess'] ?: false;
+$forceNotice  = @$_REQUEST['forceNotice'] ?: false;
 $cacheTimeout = 300; // 5 minutes
 
 // Stage
@@ -79,8 +79,11 @@ $serviceNotifications = array();
 
 // Pull Document
 if ($forceUpdate || empty($scanTargetCacheTime) || ($scanTargetCacheTime < time() - $cacheTimeout)) {
-  $pageContent = file_get_contents($scanTargetUrl);
-  if ($pageContent) {
+  $pageContent = @file_get_contents('https://www.gbgstatus.com/', false, stream_context_create(array('http' => array('follow_location' => false))));
+  if (
+    $pageContent
+    && (strpos($pageContent, 'components-section') !== false)
+    ) {
     $app->postActivityLog('Pulled Status Page');
     $scanTargetCacheTime = time();
     $app->savePluginOption('scanTargetCache', $pageContent);
@@ -117,8 +120,6 @@ if ($pageContent) {
       // Review History
       $serviceHistory = $app->getPluginOption('serviceHistory_'.$service->componentId);
       if ($forceNotice || empty($serviceHistory) || ($serviceHistory->status != $serviceStatus)) {
-
-        // inspect($service, $serviceHistory, $serviceName, $serviceStatus);
 
         // Save Status
         $app->savePluginOption('serviceHistory_'.$service->componentId, (object)array(
@@ -238,6 +239,7 @@ if ($pageContent) {
           ||
           $incidentPost->post_modified_gmt == $activeIncidentRows[$incidentId]->incidentLastUpdate
           ) {
+          $relevantIncidentPosts[] = $incidentId;
           // Skip
           continue;
         }
@@ -257,8 +259,12 @@ if ($pageContent) {
     }
     $incidentPageContent = null;
     if ($forceUpdate || empty($incidentPageCacheTime) || ($incidentPageCacheTime < time() - $cacheTimeout)) {
-      $incidentPageContent = file_get_contents($scanTargetUrl . $incidentPath);
-      if ($incidentPageContent) {
+      $incidentPageContent = @file_get_contents($scanTargetUrl . $incidentPath, false, stream_context_create(array('http' => array('follow_location' => false))));
+      if (
+        $incidentPageContent
+        && (strpos($incidentPageContent, 'incident-name') !== false)
+        && (strpos($incidentPageContent, 'components-affected') !== false)
+        ) {
         $app->postActivityLog('Pulled Incident Details Page');
         $incidentPageCacheTime = time();
         if ($incidentPost) {

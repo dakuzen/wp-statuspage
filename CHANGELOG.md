@@ -14,6 +14,14 @@ Types of changes
 
 ## [Unreleased]
 
+## [1.4.0] - 2022-11-29
+### Fixed
+- Improve handling of missing remote content
+
+## [1.3.0] - 2022-10-25
+### Fixed
+- Incident Loop abnormally tagging unchanged incidents for archive
+
 ## [1.2.0] - 2022-10-21
 ### Changed
 - Removed LESS compiler requirement
