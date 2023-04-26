@@ -202,13 +202,23 @@ class App {
   }
 
   /**
+   * Return site url
+   */
+  public function getSiteUrl(){
+    $siteUrl = $this->getPluginOption('siteUrl');
+    if (empty($siteUrl))
+      $siteUrl = get_site_url();
+    return $siteUrl;
+  }
+
+  /**
    * Undocumented function
    *
    * @param string $route
    * @return void
    */
   public function getRouteUrl($route = '') {
-    return get_site_url() . '/' . $this->getConfig('app-slug') . '/' . $route;
+    return $this->getSiteUrl() . '/' . $this->getConfig('app-slug') . '/' . $route;
   }
 
   public function getTableSortUrl($page, $field, $order, $alt = true ) {
@@ -654,7 +664,7 @@ SD;
   public function setupEmailSender(){
     if ($emailFrom = $this->getPluginOption('emailFrom')) {
       add_filter( 'wp_mail_from', function($email_from){
-        if ($email_from == 'wordpress@' . parse_url(get_site_url())['host'])
+        if ($email_from == 'wordpress@' . parse_url($this->getSiteUrl())['host'])
           return App::getInstance()->getPluginOption('emailFrom');
         return $email_from;
       }, 0, 1);

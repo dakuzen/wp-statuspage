@@ -47,7 +47,7 @@ $subscribers = $wpdb->get_results( $wpdb->prepare("
   FROM `{$wpdb->prefix}statuspage_subscriptions`
   ORDER BY `{$orderby}` {$order}
   LIMIT %d, %d
-  ", ($page * $limit), $limit) );
+  ", ($paged * $limit), $limit) );
 
 // View
 $app->loadView('admin/subscribers.php', get_defined_vars());

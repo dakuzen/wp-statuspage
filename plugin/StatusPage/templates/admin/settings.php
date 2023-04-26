@@ -32,6 +32,11 @@ $emailTemplates = $wpdb->get_results("SELECT `ID`, `post_title` FROM `{$wpdb->pr
         <input type="text" class="form-control" id="scanTargetUrl" name="statuspage_settings[scanTargetUrl]" aria-describedby="<?php echo esc_html__('Scan Target URL', 'statuspage') ?>" placeholder="eg: https://company.statuspage.io/" value="<?php echo htmlspecialchars($app->getPluginOption('scanTargetUrl')) ?>">
         <small id="scanTargetUrlHelp" class="form-text text-muted"><?php echo esc_html__('Please provide the configuration used for scanning the remote status page.', 'statuspage') ?></small>
       </div>
+      <div class="form-group siteUrl">
+        <label for="siteUrl"><?php echo esc_html__('Site URL', 'statuspage') ?></label>
+        <input type="text" class="form-control" id="siteUrl" name="statuspage_settings[siteUrl]" aria-describedby="<?php echo esc_html__('Site URL', 'statuspage') ?>" placeholder="eg: <?php echo get_site_url() ?>" value="<?php echo htmlspecialchars($app->getPluginOption('siteUrl')) ?>">
+        <small id="siteUrlHelp" class="form-text text-muted"><?php echo esc_html__('Provide the Site URL used for the website (if not same as WP General settings).', 'statuspage') ?></small>
+      </div>
       <div class="form-group scanConfigOption">
         <label for="scanConfigOption"><?php echo esc_html__('Scan Configuration', 'statuspage') ?></label>
         <div class="form-check">

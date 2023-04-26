@@ -5,7 +5,6 @@
   <h1 class="wp-heading-inline"><?php echo __('StatusPage Subscribers') ?></h1>
   <form>
     <input type="hidden" name="page" value="statuspage">
-    <input type="hidden" name="paged" value="<?php echo $paged ?>">
     <input type="hidden" name="orderby" value="<?php echo $orderby ?>">
     <input type="hidden" name="order" value="<?php echo $order ?>">
     <div class="tablenav top">
